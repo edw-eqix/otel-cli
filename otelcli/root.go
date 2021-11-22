@@ -1,4 +1,4 @@
-package cmd
+package otelcli
 
 import (
 	"os"
@@ -38,11 +38,13 @@ func addCommonParams(cmd *cobra.Command) {
 	// --config / -c a viper configuration file
 	cmd.Flags().StringVarP(&config.CfgFile, "config", "c", defaults.CfgFile, "config file (default is $HOME/.otel-cli.yaml)")
 	// --endpoint an endpoint to send otlp output to
-	cmd.Flags().StringVar(&config.Endpoint, "endpoint", defaults.Endpoint, "dial address for the desired OTLP/gRPC endpoint")
+	cmd.Flags().StringVar(&config.Endpoint, "endpoint", defaults.Endpoint, "host and port for the desired OTLP/gRPC or OTLP/HTTP endpoint (use http:// or https:// for OTLP/HTTP)")
 	// --timeout a default timeout to use in all otel-cli operations (default 1s)
 	cmd.Flags().StringVar(&config.Timeout, "timeout", defaults.Timeout, "timeout for otel-cli operations, all timeouts in otel-cli use this value")
 	// --verbose tells otel-cli to actually log errors to stderr instead of failing silently
 	cmd.Flags().BoolVar(&config.Verbose, "verbose", defaults.Verbose, "print errors on failure instead of always being silent")
+	// --fail causes a non-zero exit status on error
+	cmd.Flags().BoolVar(&config.Fail, "fail", defaults.Fail, "on failure, exit with a non-zero status")
 
 	var common_env_flags = map[string]string{
 		"endpoint": "OTEL_EXPORTER_OTLP_ENDPOINT",
